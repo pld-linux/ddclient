@@ -4,14 +4,14 @@ Summary(pl):	Narzêdzie do dynamicznych adresów IP
 Summary(pt_BR):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Epoch:		1
-Version:	3.6.3
+Version:	3.6.4
 Release:	1
 Group:		Networking
 License:	GPL
-Source0:	http://members.rogers.com/ddclient/pub/%{name}-%{version}.tar.gz
-# Source0-md5:	1773aaf469a1faddd3f20d485a0fd6f2
+Source0:	http://dl.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
+# Source0-md5:	d9582ddcb387a7d1947bcb6ae09bb78a
 Source1:	%{name}.init
-URL:		http://burry.ca:4141/ddclient/
+URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
