@@ -5,7 +5,7 @@ Summary(pt_BR):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Epoch:		1
 Version:	3.6.5
-Release:	1
+Release:	2
 Group:		Networking
 License:	GPL
 Source0:	http://dl.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
@@ -61,9 +61,9 @@ gratuita.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_sbindir}}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/ddclient,/etc/rc.d/init.d,%{_sbindir}}
 
-install sample-etc_ddclient.conf $RPM_BUILD_ROOT/etc/%{name}.conf
+install sample-etc_ddclient.conf $RPM_BUILD_ROOT/etc/%{name}/%{name}.conf
 install %{name} $RPM_BUILD_ROOT%{_sbindir}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
@@ -86,9 +86,17 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del %{name}
 fi
 
+%triggerpostun -- ddclient < 1:3.6.4
+if [ -f /etc/ddclient.conf.rpmsave ]; then
+	echo "Move config to new location /etc/ddclient"
+	mv -f /etc/ddclient/ddclient.conf /etc/ddclient/ddclient.conf.rpmnew
+	mv -f /etc/ddclient.conf.rpmsave /etc/ddclient/ddclient.conf
+	mv -f /etc/ddclient.cache /etc/ddclient.cache.rpmsave
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc README*
 %attr(755,root,root) %{_sbindir}/*
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/%{name}.conf
+%attr(600,root,root) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
