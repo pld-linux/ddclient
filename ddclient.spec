@@ -13,6 +13,8 @@ Source0:	http://members.rogers.com/ddclient/pub/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 URL:		http://burry.ca:4141/ddclient/
 BuildRequires:	rpm-perlprov
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
