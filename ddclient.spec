@@ -9,6 +9,7 @@ Group:		Networking
 License:	GPL
 URL:		http://burry.ca:4141/ddclient/
 Source0:	http://members.rogers.com/ddclient/pub/%{name}-%{version}.tar.gz
+# Source0-md5:	1773aaf469a1faddd3f20d485a0fd6f2
 Source1:	%{name}.init
 BuildArch:	noarch
 BuildRequires:	rpm-perlprov
