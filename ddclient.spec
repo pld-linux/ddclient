@@ -1,36 +1,52 @@
 %include	/usr/lib/rpm/macros.perl
+Summary:	A dynamic IP address utility
+Summary(pl):	Narzêdzie do dynamicznych adresów IP
+Summary(pt_BR):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Epoch:		1
 Version:	3.6.3
 Release:	1
-Summary:	A dynamic IP address utility
-Summary(pt_BR):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Group:		Networking
 License:	GPL
-URL:		http://burry.ca:4141/ddclient/
 Source0:	http://members.rogers.com/ddclient/pub/%{name}-%{version}.tar.gz
 # Source0-md5:	1773aaf469a1faddd3f20d485a0fd6f2
 Source1:	%{name}.init
-BuildArch:	noarch
+URL:		http://burry.ca:4141/ddclient/
 BuildRequires:	rpm-perlprov
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Features: FULL DynDNS NIC2 support and now Custom updates and an RPM!
-DDclient is a small full featured client requiring only Perl and no
-additional modules. It runs under most UNIX OSes and has been tested
-under Linux and FreeBSD. Supported features include: operating as a
-daemon, manual and automatic updates, static and dynamic updates,
-optimized updates for multiple addresses, MX, wildcards, abuse
-avoidance, retrying failed updates, and sending update status to
-syslog and through e-mail. This release may now obtain your IP address
-from any interface, web based IP detection, Watchguard's SOHO router,
-Netopia's R910 router, SMC's Barricade broadband router, Netgear's
-RT3xx router, Linksys' broadband routers, MaxGate's UGATE-3x00
-routers, ELSA's LANCOM DSL/10 routers and now provides Full support
-for DynDNS.org's NIC2 protocol. Support is also included for other
-dynamic DNS services. Comes with sample scripts for use with DHCP,
-PPP, and cron. See the README for more information.
+DDclient is a small full featured client with FULL DynDNS NIC2
+support, requiring only Perl and no additional modules. It runs under
+most UNIX OSes and has been tested under Linux and FreeBSD. Supported
+features include: operating as a daemon, manual and automatic updates,
+static and dynamic updates, optimized updates for multiple addresses,
+MX, wildcards, abuse avoidance, retrying failed updates, and sending
+update status to syslog and through e-mail. This release may now
+obtain your IP address from any interface, web based IP detection,
+Watchguard's SOHO router, Netopia's R910 router, SMC's Barricade
+broadband router, Netgear's RT3xx router, Linksys' broadband routers,
+MaxGate's UGATE-3x00 routers, ELSA's LANCOM DSL/10 routers and now
+provides Full support for DynDNS.org's NIC2 protocol. Support is also
+included for other dynamic DNS services. Comes with sample scripts for
+use with DHCP, PPP, and cron. See the README for more information.
+
+%description -l pl
+DDclient to ma³y, w pe³ni funkcjonalny klient z PE£N¡ obs³ug± DynDNS
+NIC2, wymagaj±cy tylko Perla bez ¿adnych dodatkowych modu³ów. Dzia³a
+pod wiêkszo¶ci± systemów uniksowych, by³ testowany pod Linuksem i
+FreeBSD. Jego mo¿liwo¶ci to miêdzy innymi: praca jako demon, rêczne
+i automatyczne uaktualnienia, statyczne i dynamiczne uaktualnienia,
+uaktualnienia zoptymalizowane dla wielu adresów, MX-y, wildcardy,
+zapobieganie nadu¿yciom, ponawianie nieudanych uaktualnieñ, wysy³anie
+statusu uaktualnieñ do sysloga i poczt±. Ta wersja mo¿e pobraæ adres
+IP z dowolnego interfejsu, wykrywania przez WWW, routerów: Watchguard
+SOGO, szerokopasmowych SMC Barricane, Netgear RT3xx, szerokopasmowych
+Linksys, MaxGate UGATE-3x00, ELSA LANCOM DSL/10, a teraz tak¿e ma
+pe³n± obs³ugê protoko³u DynDNS NIC2. Ma tak¿e wsparcie dla innych
+us³ug dynamicznego DNS. Zawiera przyk³adowe skrypty do u¿ywania z
+DHCP, PPP i cronem. Wiêcej informacji w README.
 
 %description -l pt_BR
 O ddclient é um cliente perl usada para atualizar entradas DNS
@@ -40,8 +56,6 @@ gratuita.
 
 %prep
 %setup -q
-
-%build
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -55,7 +69,6 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 rm -rf $RPM_BUILD_ROOT
 
 %post
-umask 022
 /sbin/chkconfig --add %{name}
 if [ -f /var/lock/subsys/%{name} ]; then
         /etc/rc.d/init.d/%{name} restart >&2
