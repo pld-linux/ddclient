@@ -73,17 +73,17 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add %{name}
 if [ -f /var/lock/subsys/%{name} ]; then
-        /etc/rc.d/init.d/%{name} restart >&2
+	/etc/rc.d/init.d/%{name} restart >&2
 else
-        echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
 fi
 
 %preun
 if [ "$1" = "0" ]; then
-        if [ -f /var/lock/subsys/%{name} ]; then
-                /etc/rc.d/init.d/%{name} stop >&2
-        fi
-        /sbin/chkconfig --del %{name}
+	if [ -f /var/lock/subsys/%{name} ]; then
+		/etc/rc.d/init.d/%{name} stop >&2
+	fi
+	/sbin/chkconfig --del %{name}
 fi
 
 %files
