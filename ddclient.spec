@@ -88,7 +88,7 @@ fi
 
 %triggerpostun -- ddclient < 1:3.6.4
 if [ -f /etc/ddclient.conf.rpmsave ]; then
-	echo "Move config to new location /etc/ddclient"
+	echo "Moving config to new location /etc/ddclient"
 	mv -f /etc/ddclient/ddclient.conf /etc/ddclient/ddclient.conf.rpmnew
 	mv -f /etc/ddclient.conf.rpmsave /etc/ddclient/ddclient.conf
 	mv -f /etc/ddclient.cache /etc/ddclient.cache.rpmsave
