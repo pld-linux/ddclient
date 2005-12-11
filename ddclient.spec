@@ -7,13 +7,13 @@ Epoch:		1
 Version:	3.6.6
 Release:	1
 Group:		Networking
-License:	GPL
+License:	GPL v2
 Source0:	http://dl.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
 # Source0-md5:	5fd0f82446fbed857c841a4deb83cdb9
 Source1:	%{name}.init
 URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
-PreReq:		rc-scripts
+Requires:	rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -96,7 +96,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README*
+%doc ChangeLog README*
 %attr(755,root,root) %{_sbindir}/*
-%attr(600,root,root) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/%{name}.conf
+%dir %{_sysconfdir}/%{name}
+%attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
