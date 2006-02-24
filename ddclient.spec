@@ -6,15 +6,16 @@ Name:		ddclient
 Epoch:		1
 Version:	3.6.7
 Release:	1
-Group:		Networking
 License:	GPL v2
+Group:		Networking
 Source0:	http://dl.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
 # Source0-md5:	b07a29a891dcf40b941b9bc5ef3ce598
 Source1:	%{name}.init
 URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
-Requires:	rc-scripts
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -63,7 +64,7 @@ gratuita.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/ddclient,/etc/rc.d/init.d,%{_sbindir}}
 
-install sample-etc_ddclient.conf $RPM_BUILD_ROOT/etc/%{name}/%{name}.conf
+install sample-etc_ddclient.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 install %{name} $RPM_BUILD_ROOT%{_sbindir}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
@@ -72,17 +73,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsys/%{name} ]; then
-	/etc/rc.d/init.d/%{name} restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
-fi
+%service %{name} restart "%{name} daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/%{name} ]; then
-		/etc/rc.d/init.d/%{name} stop >&2
-	fi
+	%service %{name} stop
 	/sbin/chkconfig --del %{name}
 fi
 
