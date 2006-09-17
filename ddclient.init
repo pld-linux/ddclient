@@ -64,7 +64,7 @@ case "$1" in
 		killproc ddclient -HUP
 		RETVAL=$?
 	else
-		msg_not_running "Dynamic DNS Client" >&2
+		msg_not_running "Dynamic DNS Client"
 		exit 7
 	fi
 	;;
