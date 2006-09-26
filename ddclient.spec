@@ -4,7 +4,7 @@ Summary(pl):	Narzêdzie do dynamicznych adresów IP
 Summary(pt_BR):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Version:	3.7.0
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2
 Group:		Networking
