@@ -1,7 +1,7 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	A dynamic IP address utility
-Summary(pl.UTF-8):   Narzędzie do dynamicznych adresów IP
-Summary(pt_BR.UTF-8):   Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
+Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
+Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Version:	3.7.0
 Release:	2
