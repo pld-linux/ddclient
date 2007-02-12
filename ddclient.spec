@@ -1,7 +1,7 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	A dynamic IP address utility
-Summary(pl):	NarzÍdzie do dynamicznych adresÛw IP
-Summary(pt_BR):	Cliente para atualizar entradas DNS din‚micas no DynDNS.org
+Summary(pl.UTF-8):   Narzƒôdzie do dynamicznych adres√≥w IP
+Summary(pt_BR.UTF-8):   Cliente para atualizar entradas DNS din√¢micas no DynDNS.org
 Name:		ddclient
 Version:	3.7.0
 Release:	2
@@ -35,25 +35,25 @@ provides Full support for DynDNS.org's NIC2 protocol. Support is also
 included for other dynamic DNS services. Comes with sample scripts for
 use with DHCP, PPP, and cron. See the README for more information.
 
-%description -l pl
-DDclient to ma≥y, w pe≥ni funkcjonalny klient z PE£N° obs≥ug± DynDNS
-NIC2, wymagaj±cy tylko Perla bez øadnych dodatkowych modu≥Ûw. Dzia≥a
-pod wiÍkszo∂ci± systemÛw uniksowych, by≥ testowany pod Linuksem i
-FreeBSD. Jego moøliwo∂ci to miÍdzy innymi: praca jako demon, rÍczne
+%description -l pl.UTF-8
+DDclient to ma≈Çy, w pe≈Çni funkcjonalny klient z PE≈ÅNƒÑ obs≈ÇugƒÖ DynDNS
+NIC2, wymagajƒÖcy tylko Perla bez ≈ºadnych dodatkowych modu≈Ç√≥w. Dzia≈Ça
+pod wiƒôkszo≈õciƒÖ system√≥w uniksowych, by≈Ç testowany pod Linuksem i
+FreeBSD. Jego mo≈ºliwo≈õci to miƒôdzy innymi: praca jako demon, rƒôczne
 i automatyczne uaktualnienia, statyczne i dynamiczne uaktualnienia,
-uaktualnienia zoptymalizowane dla wielu adresÛw, MX-y, wildcardy,
-zapobieganie naduøyciom, ponawianie nieudanych uaktualnieÒ, wysy≥anie
-statusu uaktualnieÒ do sysloga i poczt±. Ta wersja moøe pobraÊ adres
-IP z dowolnego interfejsu, wykrywania przez WWW, routerÛw: Watchguard
+uaktualnienia zoptymalizowane dla wielu adres√≥w, MX-y, wildcardy,
+zapobieganie nadu≈ºyciom, ponawianie nieudanych uaktualnie≈Ñ, wysy≈Çanie
+statusu uaktualnie≈Ñ do sysloga i pocztƒÖ. Ta wersja mo≈ºe pobraƒá adres
+IP z dowolnego interfejsu, wykrywania przez WWW, router√≥w: Watchguard
 SOGO, szerokopasmowych SMC Barricane, Netgear RT3xx, szerokopasmowych
-Linksys, MaxGate UGATE-3x00, ELSA LANCOM DSL/10, a teraz takøe ma
-pe≥n± obs≥ugÍ protoko≥u DynDNS NIC2. Ma takøe wsparcie dla innych
-us≥ug dynamicznego DNS. Zawiera przyk≥adowe skrypty do uøywania z
-DHCP, PPP i cronem. WiÍcej informacji w README.
+Linksys, MaxGate UGATE-3x00, ELSA LANCOM DSL/10, a teraz tak≈ºe ma
+pe≈ÇnƒÖ obs≈Çugƒô protoko≈Çu DynDNS NIC2. Ma tak≈ºe wsparcie dla innych
+us≈Çug dynamicznego DNS. Zawiera przyk≈Çadowe skrypty do u≈ºywania z
+DHCP, PPP i cronem. Wiƒôcej informacji w README.
 
-%description -l pt_BR
-O ddclient È um cliente perl usada para atualizar entradas DNS
-din‚micas em contas do serviÁo de DNS din‚mico gratuito. Veja
+%description -l pt_BR.UTF-8
+O ddclient √© um cliente perl usada para atualizar entradas DNS
+din√¢micas em contas do servi√ßo de DNS din√¢mico gratuito. Veja
 http://www.dyndns.org para obter detalhes sobre como obter uma conta
 gratuita.
 
