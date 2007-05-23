@@ -3,13 +3,13 @@ Summary:	A dynamic IP address utility
 Summary(pl):	Narzêdzie do dynamicznych adresów IP
 Summary(pt_BR):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
-Version:	3.7.0
+Version:	3.7.1
 Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
-# Source0-md5:	41a3307ca32cce0f67c0f3281c5f17f2
+# Source0-md5:	f41cd854e28333f56821166cf3e49836
 Source1:	%{name}.init
 URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
