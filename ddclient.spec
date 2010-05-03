@@ -4,11 +4,11 @@ Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
 Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Version:	3.8.0
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2
 Group:		Networking
-Source0:	http://dl.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
+Source0:	http://downloads.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
 # Source0-md5:	6cac7a5eb1da781bfd4d98cef0b21f8e
 Source1:	%{name}.init
 URL:		http://ddclient.sourceforge.net/
@@ -39,8 +39,8 @@ use with DHCP, PPP, and cron. See the README for more information.
 DDclient to mały, w pełni funkcjonalny klient z PEŁNĄ obsługą DynDNS
 NIC2, wymagający tylko Perla bez żadnych dodatkowych modułów. Działa
 pod większością systemów uniksowych, był testowany pod Linuksem i
-FreeBSD. Jego możliwości to między innymi: praca jako demon, ręczne
-i automatyczne uaktualnienia, statyczne i dynamiczne uaktualnienia,
+FreeBSD. Jego możliwości to między innymi: praca jako demon, ręczne i
+automatyczne uaktualnienia, statyczne i dynamiczne uaktualnienia,
 uaktualnienia zoptymalizowane dla wielu adresów, MX-y, wildcardy,
 zapobieganie nadużyciom, ponawianie nieudanych uaktualnień, wysyłanie
 statusu uaktualnień do sysloga i pocztą. Ta wersja może pobrać adres
@@ -54,7 +54,7 @@ DHCP, PPP i cronem. Więcej informacji w README.
 %description -l pt_BR.UTF-8
 O ddclient é um cliente perl usada para atualizar entradas DNS
 dinâmicas em contas do serviço de DNS dinâmico gratuito. Veja
-http://www.dyndns.org para obter detalhes sobre como obter uma conta
+<http://www.dyndns.org> para obter detalhes sobre como obter uma conta
 gratuita.
 
 %prep
