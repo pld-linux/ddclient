@@ -30,7 +30,8 @@ start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/ddclient ]; then
 		msg_starting "Dynamic DNS Client"
-		daemon /usr/sbin/ddclient -daemon 300
+		interval=$(awk -F= '{gsub(/[ \t]*#.*/, "")} $1 == "daemon" {print $2}' /etc/ddclient/ddclient.conf)
+		daemon /usr/sbin/ddclient -daemon ${interval:-300}
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ddclient
 	else
