@@ -4,7 +4,7 @@ Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
 Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Version:	3.8.0
-Release:	5
+Release:	6
 Epoch:		1
 License:	GPL v2
 Group:		Networking
@@ -18,6 +18,9 @@ BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
+# for freedns: Digest::SHA1, IO::Socket::SSL
+Suggests:	perl-Digest-SHA1
+Suggests:	perl-IO-Socket-SSL
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -100,4 +103,4 @@ fi
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_var}/cache/%{name}
-/etc/NetworkManager/dispatcher.d/50-%{name}
+%attr(755,root,root) /etc/NetworkManager/dispatcher.d/50-%{name}
