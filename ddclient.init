@@ -28,32 +28,46 @@ fi
 
 start() {
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/ddclient ]; then
-		msg_starting "Dynamic DNS Client"
-		interval=$(awk -F= '{gsub(/[ \t]*#.*/, "")} $1 == "daemon" {print $2}' /etc/ddclient/ddclient.conf)
-		daemon /usr/sbin/ddclient -daemon ${interval:-300}
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ddclient
-	else
+	if [ -f /var/lock/subsys/ddclient ]; then
 		msg_already_running "Dynamic DNS Client"
+		return
 	fi
+
+	msg_starting "Dynamic DNS Client"
+	interval=$(awk -F= '{gsub(/[ \t]*#.*/, "")} $1 == "daemon" {print $2}' /etc/ddclient/ddclient.conf)
+	daemon /usr/sbin/ddclient -daemon ${interval:-300}
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ddclient
 }
 
 stop() {
-	if [ -f /var/lock/subsys/ddclient ]; then
-		msg_stopping "Dynamic DNS Client"
-		killproc ddclient
-		rm -f /var/run/ddclient.pid /var/lock/subsys/ddclient >/dev/null 2>&1
-	else
+	if [ ! -f /var/lock/subsys/ddclient ]; then
 		msg_not_running "Dynamic DNS Client"
+		return
 	fi
+
+	msg_stopping "Dynamic DNS Client"
+	killproc ddclient
+	rm -f /var/run/ddclient.pid /var/lock/subsys/ddclient >/dev/null 2>&1
+}
+
+reload() {
+	if [ ! -f /var/lock/subsys/ddclient ]; then
+		msg_not_running "Dynamic DNS Client"
+		RETVAL=7
+		return
+	fi
+
+	msg_reloading "Dynamic DNS Client"
+	killproc ddclient -HUP
+	RETVAL=$?
 }
 
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
 	stop
@@ -62,19 +76,12 @@ case "$1" in
 	stop
 	start
 	;;
+  reload|force-reload)
+	reload
+	;;
   status)
 	status ddclient
 	exit $?
-	;;
-  reload|force-reload)
-	if [ -f /var/lock/subsys/ddclient ]; then
-		msg_reloading "Dynamic DNS Client"
-		killproc ddclient -HUP
-		RETVAL=$?
-	else
-		msg_not_running "Dynamic DNS Client"
-		exit 7
-	fi
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
