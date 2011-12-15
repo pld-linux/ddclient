@@ -4,7 +4,7 @@ Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
 Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Version:	3.8.0
-Release:	6
+Release:	7
 Epoch:		1
 License:	GPL v2
 Group:		Networking
@@ -69,7 +69,7 @@ gratuita.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/ddclient,/etc/{rc.d/init.d,NetworkManager/dispatcher.d},%{_sbindir},%{_var}/cache/%{name}}
-cp -a sample-etc_ddclient.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
+cp -p sample-etc_ddclient.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 install -p %{name} $RPM_BUILD_ROOT%{_sbindir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d/50-%{name}
