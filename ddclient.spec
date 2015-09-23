@@ -130,7 +130,8 @@ fi
 %doc ChangeLog Changelog.old README*
 %attr(755,root,root) %{_sbindir}/ddclient
 %dir %{_sysconfdir}/%{name}
-%attr(640,root,ddclient) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
+# switch to %attr(640,root,ddclient) when this gets resolution: https://sourceforge.net/p/ddclient/bugs/77/
+%attr(600,ddclient,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ddclient
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) /etc/NetworkManager/dispatcher.d/50-%{name}
