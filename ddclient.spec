@@ -3,15 +3,16 @@ Summary:	A dynamic IP address utility
 Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
 Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
-Version:	3.8.2
+Version:	3.8.3
 Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Networking
 Source0:	http://downloads.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
-# Source0-md5:	62cd5fe93ced2c794d5f441f9d908841
+# Source0-md5:	3b426ae52d509e463b42eeb08fb89e0b
 Source1:	%{name}.init
 Source2:	%{name}.NetworkManager
+# https://github.com/wimpunk/ddclient
 URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -20,6 +21,8 @@ Requires:	rc-scripts
 # for freedns: Digest::SHA1, IO::Socket::SSL
 Suggests:	perl-Digest-SHA1
 Suggests:	perl-IO-Socket-SSL
+# for cloudflare JSON::Any
+Suggests:	perl-JSON-Any
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -95,7 +98,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc Changelog README*
+%doc ChangeLog Changelog.old README*
 %attr(755,root,root) %{_sbindir}/ddclient
 %dir %{_sysconfdir}/%{name}
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
