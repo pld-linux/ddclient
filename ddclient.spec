@@ -13,6 +13,7 @@ Source0:	http://downloads.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.NetworkManager
+Source4:	%{name}-tmpfiles.conf
 Patch0:		config.patch
 # https://github.com/wimpunk/ddclient
 URL:		http://ddclient.sourceforge.net/
@@ -85,13 +86,14 @@ cp -p sample-etc_ddclient.conf %{name}.conf
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/etc/{rc.d/init.d,sysconfig,NetworkManager/dispatcher.d}} \
-	$RPM_BUILD_ROOT{%{_sbindir},%{cachedir},%{rundir}}
+	$RPM_BUILD_ROOT{%{_sbindir},%{systemdtmpfilesdir},%{cachedir},%{rundir}}
 
 cp -p %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -p %{name} $RPM_BUILD_ROOT%{_sbindir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install -p %{SOURCE3} $RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d/50-%{name}
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 touch $RPM_BUILD_ROOT%{cachedir}/%{name}.cache
 
 %clean
@@ -132,9 +134,10 @@ fi
 %dir %{_sysconfdir}/%{name}
 # switch to %attr(640,root,ddclient) when this gets resolution: https://sourceforge.net/p/ddclient/bugs/77/
 %attr(600,ddclient,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
-%attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ddclient
+%attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) /etc/NetworkManager/dispatcher.d/50-%{name}
+%{systemdtmpfilesdir}/%{name}.conf
 
 %dir %attr(770,root,ddclient) %{cachedir}
 %ghost %attr(600,ddclient,ddclient) %ghost %{cachedir}/%{name}.cache
