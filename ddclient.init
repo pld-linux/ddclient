@@ -17,6 +17,8 @@
 DDCLIENT_OPTIONS="-daemon 300"
 [ -f /etc/sysconfig/ddclient ] && . /etc/sysconfig/ddclient
 
+pidfile=/var/run/ddclient/ddclient.pid
+
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
@@ -35,7 +37,7 @@ start() {
 	fi
 
 	msg_starting "Dynamic DNS Client"
-	daemon /usr/sbin/ddclient $DDCLIENT_OPTIONS
+	daemon --user ddclient /usr/sbin/ddclient $DDCLIENT_OPTIONS
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ddclient
 }
@@ -47,8 +49,8 @@ stop() {
 	fi
 
 	msg_stopping "Dynamic DNS Client"
-	killproc ddclient
-	rm -f /var/run/ddclient.pid /var/lock/subsys/ddclient >/dev/null 2>&1
+	killproc ddclient --pidfile $pidfile
+	rm -f $pidfile /var/lock/subsys/ddclient >/dev/null 2>&1
 }
 
 reload() {
@@ -80,7 +82,7 @@ case "$1" in
 	reload
 	;;
   status)
-	status ddclient
+	status --pidfile $pidfile ddclient
 	exit $?
 	;;
   *)

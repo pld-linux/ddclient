@@ -18,7 +18,15 @@ Patch0:		config.patch
 URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
+Provides:	group(ddclient)
+Provides:	user(ddclient)
 Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
 Requires:	rc-scripts
 # for freedns: Digest::SHA1, IO::Socket::SSL
 Suggests:	perl-Digest-SHA1
@@ -27,6 +35,9 @@ Suggests:	perl-IO-Socket-SSL
 Suggests:	perl-JSON-Any
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		cachedir	%{_localstatedir}/cache/ddclient
+%define		rundir		%{_localstatedir}/run/ddclient
 
 %description
 DDclient is a small full featured client with FULL DynDNS NIC2
@@ -73,15 +84,22 @@ cp -p sample-etc_ddclient.conf %{name}.conf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/ddclient,/etc/{rc.d/init.d,sysconfig,NetworkManager/dispatcher.d},%{_sbindir},%{_var}/cache/%{name}}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/etc/{rc.d/init.d,sysconfig,NetworkManager/dispatcher.d}} \
+	$RPM_BUILD_ROOT{%{_sbindir},%{cachedir},%{rundir}}
+
 cp -p %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -p %{name} $RPM_BUILD_ROOT%{_sbindir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install -p %{SOURCE3} $RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d/50-%{name}
+touch $RPM_BUILD_ROOT%{cachedir}/%{name}.cache
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%pre
+%groupadd -g 325 ddclient
+%useradd -u 525 -d /var/run/%{name} -g ddclient -c "ddclient user" ddclient
 
 %post
 /sbin/chkconfig --add %{name}
@@ -91,6 +109,12 @@ rm -rf $RPM_BUILD_ROOT
 if [ "$1" = "0" ]; then
 	%service %{name} stop
 	/sbin/chkconfig --del %{name}
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+	%userremove ddclient
+	%groupremove ddclient
 fi
 
 %triggerpostun -- ddclient < 1:3.6.4
@@ -106,8 +130,11 @@ fi
 %doc ChangeLog Changelog.old README*
 %attr(755,root,root) %{_sbindir}/ddclient
 %dir %{_sysconfdir}/%{name}
-%attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
+%attr(640,root,ddclient) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ddclient
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%dir %{_var}/cache/%{name}
 %attr(755,root,root) /etc/NetworkManager/dispatcher.d/50-%{name}
+
+%dir %attr(770,root,ddclient) %{cachedir}
+%ghost %attr(600,ddclient,ddclient) %ghost %{cachedir}/%{name}.cache
+%dir %attr(770,root,ddclient) %{rundir}
