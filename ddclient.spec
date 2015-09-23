@@ -11,7 +11,8 @@ Group:		Networking
 Source0:	http://downloads.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
 # Source0-md5:	3b426ae52d509e463b42eeb08fb89e0b
 Source1:	%{name}.init
-Source2:	%{name}.NetworkManager
+Source2:	%{name}.sysconfig
+Source3:	%{name}.NetworkManager
 # https://github.com/wimpunk/ddclient
 URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
@@ -69,11 +70,12 @@ gratuita.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/ddclient,/etc/{rc.d/init.d,NetworkManager/dispatcher.d},%{_sbindir},%{_var}/cache/%{name}}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/ddclient,/etc/{rc.d/init.d,sysconfig,NetworkManager/dispatcher.d},%{_sbindir},%{_var}/cache/%{name}}
 cp -p sample-etc_ddclient.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
 install -p %{name} $RPM_BUILD_ROOT%{_sbindir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d/50-%{name}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+install -p %{SOURCE3} $RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d/50-%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -102,6 +104,7 @@ fi
 %attr(755,root,root) %{_sbindir}/ddclient
 %dir %{_sysconfdir}/%{name}
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
+%attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ddclient
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_var}/cache/%{name}
 %attr(755,root,root) /etc/NetworkManager/dispatcher.d/50-%{name}
