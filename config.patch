@@ -1,0 +1,11 @@
+--- ddclient-3.8.3/ddclient.conf	2015-09-23 08:29:05.051308301 +0300
++++ ddclient-3.8.3/ddclient.conf	2015-05-30 12:37:38.000000000 +0300
+@@ -20,7 +20,7 @@
+ ######################################################################
+ daemon=300				# check every 300 seconds
+ syslog=yes				# log update msgs to syslog
+-mail=root				# mail all msgs to root
++#mail=root				# mail all msgs to root
+ mail-failure=root			# mail failed update msgs to root
+ pid=/var/run/ddclient.pid		# record PID in file.
+ ssl=yes					# use ssl-support.  Works with

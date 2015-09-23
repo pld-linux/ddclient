@@ -13,6 +13,7 @@ Source0:	http://downloads.sourceforge.net/ddclient/%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.NetworkManager
+Patch0:		config.patch
 # https://github.com/wimpunk/ddclient
 URL:		http://ddclient.sourceforge.net/
 BuildRequires:	rpm-perlprov
@@ -67,11 +68,13 @@ gratuita.
 
 %prep
 %setup -q
+cp -p sample-etc_ddclient.conf %{name}.conf
+%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/ddclient,/etc/{rc.d/init.d,sysconfig,NetworkManager/dispatcher.d},%{_sbindir},%{_var}/cache/%{name}}
-cp -p sample-etc_ddclient.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}.conf
+cp -p %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -p %{name} $RPM_BUILD_ROOT%{_sbindir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
