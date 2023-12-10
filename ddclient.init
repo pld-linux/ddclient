@@ -53,6 +53,16 @@ stop() {
 	rm -f $pidfile /var/lock/subsys/ddclient >/dev/null 2>&1
 }
 
+condrestart() {
+	if [ ! -f /var/lock/subsys/ddclient ]; then
+		msg_not_running "Dynamic DNS Client"
+		return 0
+	fi
+
+	stop
+	start
+}
+
 reload() {
 	if [ ! -f /var/lock/subsys/ddclient ]; then
 		msg_not_running "Dynamic DNS Client"
@@ -78,6 +88,9 @@ case "$1" in
 	stop
 	start
 	;;
+  try-restart)
+	condrestart
+	;;
   reload|force-reload)
 	reload
 	;;
@@ -86,7 +99,7 @@ case "$1" in
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
 	exit 3
 esac
 

@@ -103,7 +103,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-%service %{name} restart "%{name} daemon"
+if [ "$1" = "2" ]; then
+	%service %{name} try-restart "%{name} daemon"
+fi
 
 %preun
 if [ "$1" = "0" ]; then
