@@ -1,0 +1,13 @@
+[Unit]
+Description=Dynamic DNS Update Client
+After=syslog.target network-online.target nss-lookup.target
+
+[Service]
+User=ddclient
+Group=ddclient
+Type=forking
+EnvironmentFile=-/etc/sysconfig/ddclient
+ExecStart=/usr/sbin/ddclient $DDCLIENT_OPTIONS
+
+[Install]
+WantedBy=multi-user.target

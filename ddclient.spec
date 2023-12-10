@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	systemd		# systemd units
+
 Summary:	A dynamic IP address utility
 Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
 Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
@@ -13,6 +17,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.NetworkManager
 Source4:	%{name}-tmpfiles.conf
+Source5:	%{name}.service
 Patch0:		config.patch
 URL:		https://github.com/ddclient/ddclient
 BuildRequires:	rpm-perlprov
@@ -27,6 +32,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	rc-scripts
+%{?with_systemd:Requires:	systemd-units >= 1:250.1}
 # for freedns: Digest::SHA1, IO::Socket::SSL
 Suggests:	perl-Digest-SHA1
 Suggests:	perl-IO-Socket-SSL
@@ -84,7 +90,7 @@ cp -p sample-etc_ddclient.conf %{name}.conf
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/etc/{rc.d/init.d,sysconfig,NetworkManager/dispatcher.d}} \
-	$RPM_BUILD_ROOT{%{_sbindir},%{systemdtmpfilesdir},%{cachedir},%{rundir}}
+	$RPM_BUILD_ROOT{%{_sbindir},%{systemdtmpfilesdir},%{?with_systemd:%{systemdunitdir},}%{cachedir},%{rundir}}
 
 cp -p %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -p %{name} $RPM_BUILD_ROOT%{_sbindir}
@@ -92,6 +98,7 @@ install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install -p %{SOURCE3} $RPM_BUILD_ROOT/etc/NetworkManager/dispatcher.d/50-%{name}
 cp -p %{SOURCE4} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+%{?with_systemd:cp -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdunitdir}/%{name}.service}
 touch $RPM_BUILD_ROOT%{cachedir}/%{name}.cache
 
 %clean
@@ -106,26 +113,30 @@ rm -rf $RPM_BUILD_ROOT
 if [ "$1" = "2" ]; then
 	%service %{name} try-restart "%{name} daemon"
 fi
+%{?with_systemd:%systemd_post %{name}.service}
 
 %preun
 if [ "$1" = "0" ]; then
 	%service %{name} stop
 	/sbin/chkconfig --del %{name}
 fi
+%{?with_systemd:%systemd_preun %{name}.service}
 
 %postun
 if [ "$1" = "0" ]; then
 	%userremove ddclient
 	%groupremove ddclient
 fi
+%{?with_systemd:%systemd_reload}
 
-%triggerpostun -- ddclient < 1:3.6.4
+%triggerpostun -- ddclient < 1:3.9.1-2
 if [ -f /etc/ddclient.conf.rpmsave ]; then
 	echo "Moving config to new location /etc/ddclient"
 	mv -f /etc/ddclient/ddclient.conf /etc/ddclient/ddclient.conf.rpmnew
 	mv -f /etc/ddclient.conf.rpmsave /etc/ddclient/ddclient.conf
 	mv -f /etc/ddclient.cache /etc/ddclient.cache.rpmsave
 fi
+%{?with_systemd:%systemd_trigger %{name}.service}
 
 %files
 %defattr(644,root,root,755)
@@ -138,6 +149,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) /etc/NetworkManager/dispatcher.d/50-%{name}
 %{systemdtmpfilesdir}/%{name}.conf
+%{?with_systemd:%{systemdunitdir}/%{name}.service}
 
 %dir %attr(770,root,ddclient) %{cachedir}
 %ghost %attr(600,ddclient,ddclient) %ghost %{cachedir}/%{name}.cache
