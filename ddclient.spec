@@ -7,7 +7,7 @@ Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
 Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
 Version:	3.9.1
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2
 Group:		Networking
@@ -137,6 +137,11 @@ if [ -f /etc/ddclient.conf.rpmsave ]; then
 	mv -f /etc/ddclient.cache /etc/ddclient.cache.rpmsave
 fi
 %{?with_systemd:%systemd_trigger %{name}.service}
+
+%triggerin -- perl-base
+[ "$2" = "2" ] || exit 0
+%service %{name} try-restart "%{name} daemon"
+%{?with_systemd:%systemd_service_restart %{name}.service}
 
 %files
 %defattr(644,root,root,755)
