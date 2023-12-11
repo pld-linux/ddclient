@@ -6,13 +6,13 @@ Summary:	A dynamic IP address utility
 Summary(pl.UTF-8):	Narzędzie do dynamicznych adresów IP
 Summary(pt_BR.UTF-8):	Cliente para atualizar entradas DNS dinâmicas no DynDNS.org
 Name:		ddclient
-Version:	3.9.1
-Release:	2
+Version:	3.11.2
+Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Networking
 Source0:	https://github.com/ddclient/ddclient/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	8497033052649ebe6f714338c7be4cda
+# Source0-md5:	5ef2ff089cfe4d4b9e1248881199eb4a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.NetworkManager
@@ -20,6 +20,9 @@ Source4:	%{name}-tmpfiles.conf
 Source5:	%{name}.service
 Patch0:		config.patch
 URL:		https://github.com/ddclient/ddclient
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	perl-base
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Provides:	group(ddclient)
@@ -43,6 +46,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		cachedir	%{_localstatedir}/cache/ddclient
 %define		rundir		%{_localstatedir}/run/ddclient
+%define		_sysconfdir	/etc/ddclient
 
 %description
 DDclient is a small full featured client with FULL DynDNS NIC2
@@ -84,15 +88,22 @@ gratuita.
 
 %prep
 %setup -q
-cp -p sample-etc_ddclient.conf %{name}.conf
 %patch0 -p1
+
+%build
+%{__aclocal}
+%{__autoconf}
+%{__automake}
+%configure \
+	CURL=/usr/bin/curl
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{name},/etc/{rc.d/init.d,sysconfig,NetworkManager/dispatcher.d}} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{systemdtmpfilesdir},%{?with_systemd:%{systemdunitdir},}%{cachedir},%{rundir}}
 
-cp -p %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+cp -p %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install -p %{name} $RPM_BUILD_ROOT%{_sbindir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
@@ -145,11 +156,11 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog Changelog.old README*
+%doc ChangeLog.md README*
 %attr(755,root,root) %{_sbindir}/ddclient
-%dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}
 # switch to %attr(640,root,ddclient) when this gets resolution: https://sourceforge.net/p/ddclient/bugs/77/
-%attr(600,ddclient,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
+%attr(600,ddclient,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.conf
 %attr(600,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) /etc/NetworkManager/dispatcher.d/50-%{name}
